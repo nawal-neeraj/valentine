@@ -7,9 +7,10 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import mine from "../../public/mine.jpg";
+import { useNavigate } from "react-router-dom";
 
 const Accepted = () => {
+  const navigate = useNavigate();
   // Generate hearts dynamically with random properties
   const hearts = Array.from({ length: 28 }, (_, i) => {
     const size = Math.random() * 1.8 + 1.2; // between ~1.2rem and 3rem
@@ -103,9 +104,9 @@ const Accepted = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.8, ease: "easeOut", delay: 0.4 }}
         >
-          <Box position="relative" mx="auto">
+          <Box onClick={() => navigate("/")} position="relative" mx="auto">
             <Image
-              src={mine}
+              src="/mine.JPG"
               alt="Glowing Heart"
               boxSize={{ base: "220px", md: "320px", lg: "400px" }}
               objectFit="contain"

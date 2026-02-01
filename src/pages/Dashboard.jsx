@@ -1,7 +1,6 @@
 import { Box, Button, Text, useColorModeValue, Flex } from "@chakra-ui/react";
 import RunawayButton from "./RunAwayButton";
 import { Image } from "@chakra-ui/react";
-import heart from "../../public/heart.png";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
@@ -36,7 +35,7 @@ const Dashboard = () => {
             mb={6}
             w="auto"
             mx="auto"
-            src={heart}
+            src={"heart.png"}
             objectFit="contain" // crucial for transparent PNGs
             transition="transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1)" // bouncy overshoot
             _hover={{
