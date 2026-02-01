@@ -9,7 +9,7 @@ const Dashboard = () => {
 
   return (
     <Box p={6} minH="100vh" position="relative">
-      <Box bg={bg} borderRadius="lg" p={20} boxShadow="md" minH="60vh">
+      <Box bg={bg} borderRadius="lg" boxShadow="md" minH="60vh">
         <Box textAlign="center" mb={6}>
           <Text
             fontSize={{ base: "4xl", md: "6xl", lg: "7xl" }} // big & responsive
