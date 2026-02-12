@@ -54,6 +54,117 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.35);
+  }
+
+  50% {
+    box-shadow: 0 0 40px rgba(236, 72, 153, 0.55);
+  }
+
+  100% {
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.35);
+  }
+}
+
+@keyframes alertPop {
+  0% {
+    transform: scale(0.9) translateY(10px);
+    opacity: 0;
+  }
+
+  60% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes heartBeatGlow {
+  0% {
+    transform: scale(1);
+    text-shadow: 0 0 6px rgba(236, 72, 153, 0.4);
+  }
+
+  20% {
+    transform: scale(1.08);
+    text-shadow: 0 0 14px rgba(236, 72, 153, 0.7),
+      0 0 28px rgba(168, 85, 247, 0.6);
+  }
+
+  40% {
+    transform: scale(1);
+    text-shadow: 0 0 8px rgba(236, 72, 153, 0.5);
+  }
+
+  60% {
+    transform: scale(1.05);
+    text-shadow: 0 0 18px rgba(168, 85, 247, 0.7);
+  }
+
+  100% {
+    transform: scale(1);
+    text-shadow: 0 0 6px rgba(236, 72, 153, 0.4);
+  }
+}
+
+@keyframes yayBeat {
+
+  0%,
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 12px #ff69b4);
+  }
+
+  40% {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 35px #ff1493);
+  }
+
+  60% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 20px #ff69b4);
+  }
+}
+
+@keyframes fallStar {
+  0% {
+    transform: translateY(-10vh) translateX(0);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(120vh) translateX(40px);
+    opacity: 0;
+  }
+}
+
+@keyframes purpleHeartBeat {
+
+  0%,
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 15px #a855f7);
+  }
+
+  30% {
+    transform: scale(1.18);
+    filter: drop-shadow(0 0 35px #9333ea);
+  }
+
+  60% {
+    transform: scale(1.05);
+  }
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

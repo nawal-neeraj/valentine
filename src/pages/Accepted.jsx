@@ -1,169 +1,154 @@
-import {
-  Box,
-  Button,
-  Text,
-  Flex,
-  useColorModeValue,
-  Image,
-} from "@chakra-ui/react";
+import { Box, Text, Flex, useColorModeValue, Image } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Accepted = () => {
   const navigate = useNavigate();
-  // Generate hearts dynamically with random properties
-  const hearts = Array.from({ length: 28 }, (_, i) => {
-    const size = Math.random() * 1.8 + 1.2; // between ~1.2rem and 3rem
-    const left = Math.random() * 100; // random horizontal position %
-    const duration = Math.random() * 15 + 12; // 12–27 seconds
-    const delay = Math.random() * 10; // 0–10s start delay
-    const drift = (Math.random() - 0.5) * 60; // -30vw to +30vw sideways drift
+  const bg = useColorModeValue("pink.50", "purple.900");
 
-    // Cycle through different heart emojis and colors
-    const heartTypes = ["💗", "💖", "❤️", "💕", "🩷"];
-    const colors = ["#ff69b4", "#ff1493", "#ffb6c1", "#ff85c0"];
-    const heart = heartTypes[i % heartTypes.length];
-    const color = colors[i % colors.length];
+  const [savedImage, setSavedImage] = useState(null);
+  const [savedName, setSavedName] = useState("");
+
+  // 🌸 Load saved data
+  useEffect(() => {
+    setSavedImage(localStorage.getItem("valentine_image"));
+    setSavedName(localStorage.getItem("valentine_name") || "");
+  }, []);
+
+  // 💕 Floating hearts (pink + purple only)
+  const hearts = Array.from({ length: 24 }).map((_, i) => {
+    const size = Math.random() * 1.5 + 1.2;
+    const left = Math.random() * 100;
+    const duration = Math.random() * 14 + 10;
+    const delay = Math.random() * 8;
+    const drift = (Math.random() - 0.5) * 50;
+
+    const icons = ["💗", "💕"];
+    const colors = ["#ec4899", "#a855f7"];
 
     return (
       <Box
         key={i}
         position="absolute"
-        fontSize={size + "rem"}
-        color={color}
-        left={left + "%"}
-        bottom="-10vh" // start below the viewport
+        fontSize={`${size}rem`}
+        left={`${left}%`}
+        bottom="-10vh"
+        color={colors[i % colors.length]}
         opacity={0}
         pointerEvents="none"
-        userSelect="none"
-        textShadow="0 0 12px rgba(255, 105, 180, 0.7)"
         animation={`floatUp ${duration}s linear infinite`}
-        animationDelay={delay + "s"}
-        style={{ "--drift": drift + "vw" }}
+        animationDelay={`${delay}s`}
+        style={{ "--drift": `${drift}vw` }}
       >
-        {heart}
+        {icons[i % icons.length]}
       </Box>
     );
   });
 
-  const bg = useColorModeValue("pink.50", "pink.950");
-
   return (
-    <Box
-      position="relative"
-      minHeight="100vh"
-      overflow="hidden"
-      // background="linear-gradient(to bottom right, #ff9a9e, #ff69b4)"
-      _before={{
-        content: '""',
-        position: "absolute",
-        inset: 0,
-        background: bg,
-        opacity: 0.25,
-        zIndex: 1,
-      }}
-    >
-      {/* Floating hearts container */}
-      <Box
-        position="absolute"
-        inset={0}
-        zIndex={2}
-        pointerEvents="none"
-        overflow="hidden"
-      >
+    <Box position="relative" minH="100vh" overflow="hidden">
+      {/* 🌸 Background */}
+      <Box position="absolute" inset={0} bg={bg} opacity={0.4} />
+
+      {/* 💕 Hearts */}
+      <Box position="absolute" inset={0}>
         {hearts}
       </Box>
 
-      {/* Main romantic content */}
+      {/* 💖 Content */}
       <Flex
-        position="relative"
-        zIndex={10}
-        minHeight="100vh"
-        alignItems="center"
-        justifyContent="center"
-        flexDirection="column"
-        padding={6}
+        minH="100vh"
+        align="center"
+        justify="center"
+        direction="column"
+        gap={6}
         textAlign="center"
-        gap={8}
+        p={6}
+        position="relative"
+        zIndex={5}
       >
-        <Text
-          fontSize={{ base: "5xl", md: "7xl", lg: "8xl" }}
-          fontWeight="extrabold"
-          background="linear-gradient(to right, #ff69b4, #ff1493, #ff69b4)"
-          backgroundClip="text"
-          textShadow="0 4px 20px rgba(255, 20, 147, 0.5)"
-          letterSpacing="tight"
-          lineHeight={1.1}
-          animation="glow 4s ease-in-out infinite alternate"
-        >
-          Yess!!!
-        </Text>
+        {/* 💕 Message */}
+        {savedName && (
+          <Text
+            fontSize={{ base: "2xl", md: "3xl" }}
+            fontWeight="extrabold"
+            bgGradient="linear(to-r, purple.400, pink.400)"
+            bgClip="text"
+            animation="heartBeatGlow 1.8s ease-in-out infinite"
+          >
+            Hey {savedName}💕, you made my heart smile !!
+          </Text>
+        )}
 
+        {/* 💖 Image or Yay */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.7 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.8, ease: "easeOut", delay: 0.4 }}
+          initial={{ scale: 0.7, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
         >
-          <Box onClick={() => navigate("/")} position="relative" mx="auto">
+          {savedImage ? (
             <Image
-              src="/mine.JPG"
-              alt="Glowing Heart"
-              boxSize={{ base: "220px", md: "320px", lg: "400px" }}
-              objectFit="contain"
-              filter="drop-shadow(0 0 30px #ff69b4)"
-              // borderRadius="full" // optional soft circle
+              src={savedImage}
+              alt="Valentine"
+              boxSize={{ base: "220px", md: "320px" }}
+              objectFit="cover"
+              borderRadius="xl"
+              filter="drop-shadow(0 0 30px #ec4899)"
+              cursor="pointer"
+              onClick={() => navigate("/")}
             />
-            {/* <Text
-              position="absolute"
-              top="80%"
-              left="50%"
-              transform="translate(-50%, -50%) rotate(-15deg)"
-              fontSize={{ base: "4xl", md: "6xl" }}
-              fontWeight="bold"
-              color="pink.300"
-              opacity={0.4}
-              pointerEvents="none"
-              userSelect="none"
-              textShadow="0 0 10px rgba(0,0,0,0.5)"
-              whiteSpace="nowrap"
+          ) : (
+            <Text
+              fontSize={{ base: "6xl", md: "8xl" }}
+              fontWeight="extrabold"
+              bgGradient="linear(to-r, pink.400, purple.400)"
+              bgClip="text"
+              animation="heartBeatGlow 1.8s ease-in-out infinite"
+              textShadow="0 0 25px rgba(236,72,153,0.6)"
             >
-              © NNB 2026
-            </Text> */}
-          </Box>
+              Yay 💖
+            </Text>
+          )}
         </motion.div>
 
-        {/* Big static heart (emoji) */}
-        <Text fontSize={{ base: "140px", md: "180px" }}>💞</Text>
+        {/* 💞 Big heart */}
+        <Text
+          fontSize={{ base: "120px", md: "160px" }}
+          color="purple.400"
+          animation="purpleHeartBeat 1.4s ease-in-out infinite"
+          filter="drop-shadow(0 0 20px #a855f7)"
+        >
+          💕
+        </Text>
       </Flex>
 
-      {/* Global keyframes (put this in public/index.html <style> or global CSS file) */}
+      {/* 🌈 Animations */}
       <style jsx global>{`
         @keyframes floatUp {
           0% {
-            transform: translateY(0) translateX(0) rotate(0deg);
+            transform: translateY(0) translateX(0);
             opacity: 0;
           }
-          10% {
-            opacity: 0.9;
-          }
-          90% {
+          15% {
             opacity: 0.9;
           }
           100% {
             transform: translateY(-120vh) translateX(var(--drift))
-              rotate(720deg);
+              rotate(360deg);
             opacity: 0;
           }
         }
 
-        @keyframes glow {
-          from {
-            text-shadow: 0 0 15px #ff69b4;
+        @keyframes heartBeatGlow {
+          0%,
+          100% {
+            transform: scale(1);
+            filter: drop-shadow(0 0 10px #ec4899);
           }
-          to {
-            text-shadow:
-              0 0 40px #ff1493,
-              0 0 60px #ff69b4;
+          50% {
+            transform: scale(1.12);
+            filter: drop-shadow(0 0 25px #a855f7);
           }
         }
       `}</style>
