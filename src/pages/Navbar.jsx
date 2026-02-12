@@ -1,5 +1,6 @@
 import { Flex, Heading, Spacer, Box } from "@chakra-ui/react";
 import ThemeToggleButton from "./ThemeToggle";
+import AdBanner from "./AddBanner";
 
 export default function Navbar() {
   return (
@@ -26,6 +27,9 @@ export default function Navbar() {
         >
           Valentine’s Week Special 💕
         </Heading>
+      </Box>
+      <Box>
+        <AdBanner />
       </Box>
       <Spacer />
       <ThemeToggleButton />
