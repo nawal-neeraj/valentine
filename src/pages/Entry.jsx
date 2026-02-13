@@ -106,15 +106,15 @@ const Entry = () => {
     });
     setShowAlert(true);
 
-    setTimeout(() => {
-      navigate("/dashboard");
-    }, 1800);
+    // setTimeout(() => {
+    //   navigate("/dashboard");
+    // }, 1800);
     const url = new URL(window.location.origin + "/dashboard");
     url.searchParams.set("name", encodeURIComponent(name));
     url.searchParams.set("image", encodeURIComponent(preview));
     setShareUrl(url.toString());
     // setTimeout(() => {
-    navigate("/dashboard");
+    // navigate("/dashboard");
     //   navigate("/dashboard");
     // }, 1800);
     setName("");
