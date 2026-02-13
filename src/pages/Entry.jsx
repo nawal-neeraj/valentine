@@ -89,6 +89,48 @@ const Entry = () => {
     setTimeout(() => {
       navigate("/dashboard");
     }, 1800);
+    const url = new URL(window.location.origin + "/dashboard");
+    url.searchParams.set("name", encodeURIComponent(name));
+    url.searchParams.set("image", encodeURIComponent(preview));
+    setShareUrl(url.toString());
+    // setTimeout(() => {
+    navigate("/dashboard");
+    // }, 1800);
+    setName("");
+    setPreview("");
+  };
+
+  const handleCopyLink = async () => {
+    if (navigator.share) {
+      // Modern share API
+      try {
+        await navigator.share({
+          title: "Valentine's Surprise 🌹",
+          text: "Check out my special message!",
+          url: shareUrl,
+        });
+        toast({
+          title: "Shared successfully!",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+      } catch (err) {
+        console.error("Share failed:", err);
+      }
+    } else if (navigator.clipboard) {
+      // Fallback: copy to clipboard
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      toast({
+        title: "Link copied to clipboard!",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+    } else {
+      alert("Your browser does not support sharing or clipboard copy.");
+    }
   };
 
   return (
