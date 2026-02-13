@@ -226,7 +226,7 @@ const Entry = () => {
                   <Button
                     onClick={handleClick}
                     h="56px"
-                    w="90%"
+                    w="100%"
                     fontWeight="bold"
                     rounded="full"
                     color="white"
@@ -254,7 +254,6 @@ const Entry = () => {
                   </Button>
                 </Box>
               </Flex>
-
               {/* 🚀 Submit */}
               <Box mt="auto" textAlign="center" pt="1.5rem">
                 <Button
