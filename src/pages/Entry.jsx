@@ -11,6 +11,8 @@ import { useNavigate } from "react-router-dom";
 import DecorativeBox from "./DecorativeBox";
 import AlertBox from "./AlertBox";
 import FallingStars from "./FallingStar";
+import uploadBase64ToCloudinary from "../utils/Cloudanry";
+import { generateToken } from "../utils/JwtToken";
 
 /* 💜 Purple success animation */
 const successAnimation = {
@@ -32,6 +34,8 @@ const Entry = () => {
   const [animateSuccess, setAnimateSuccess] = useState(false);
 
   const [showAlert, setShowAlert] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [shareUrl, setShareUrl] = useState("");
   const [alertData, setAlertData] = useState({
     title: "",
     description: "",
@@ -40,18 +44,33 @@ const Entry = () => {
 
   const handleClick = () => inputRef.current.click();
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64 = reader.result;
-      localStorage.setItem("valentine_image", base64);
-      setPreview(base64);
+    reader.onloadend = async () => {
+      const base64 = reader.result; // base64 string
 
+      // Start animation for button
       setAnimateSuccess(true);
       setTimeout(() => setAnimateSuccess(false), 1800);
+
+      // Start uploading
+      setIsUploading(true);
+      try {
+        const uploadedUrl = await uploadBase64ToCloudinary(base64);
+        if (uploadedUrl) {
+          const token = generateToken({ image: uploadedUrl }, "1d");
+          setPreview(token); // save Cloudinary URL
+          localStorage.setItem("valentine_image", uploadedUrl);
+        }
+        console.log("Uploaded Image URL:", uploadedUrl);
+      } catch (err) {
+        console.error("Cloudinary upload error:", err);
+      } finally {
+        setIsUploading(false); // stop loading
+      }
     };
     reader.readAsDataURL(file);
   };
@@ -64,6 +83,7 @@ const Entry = () => {
         type: "warning",
       });
       setShowAlert(true);
+
       return;
     }
 
@@ -86,9 +106,48 @@ const Entry = () => {
     });
     setShowAlert(true);
 
-    setTimeout(() => {
-      navigate("/dashboard");
-    }, 1800);
+    const url = new URL(window.location.origin + "/dashboard");
+    url.searchParams.set("name", encodeURIComponent(name));
+    url.searchParams.set("image", encodeURIComponent(preview));
+    setShareUrl(url.toString());
+    // setTimeout(() => {
+    //   navigate("/dashboard");
+    // }, 1800);
+    setName("");
+    setPreview("");
+  };
+
+  const handleCopyLink = async () => {
+    if (navigator.share) {
+      // Modern share API
+      try {
+        await navigator.share({
+          title: "Valentine's Surprise 🌹",
+          text: "Check out my special message!",
+          url: shareUrl,
+        });
+        toast({
+          title: "Shared successfully!",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+      } catch (err) {
+        console.error("Share failed:", err);
+      }
+    } else if (navigator.clipboard) {
+      // Fallback: copy to clipboard
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      toast({
+        title: "Link copied to clipboard!",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+    } else {
+      alert("Your browser does not support sharing or clipboard copy.");
+    }
   };
 
   return (
@@ -183,6 +242,8 @@ const Entry = () => {
                     _active={{
                       transform: "scale(0.96)",
                     }}
+                    isLoading={isUploading} //
+                    loadingText="Wait..."
                     _focusVisible={{
                       outline: "none",
                       boxShadow:
@@ -213,6 +274,45 @@ const Entry = () => {
                   Submit
                 </Button>
               </Box>
+              {shareUrl && (
+                <Flex mt={3} gap={3}>
+                  <Input
+                    h="56px"
+                    rounded="full"
+                    placeholder="Enter Name"
+                    bg={useColorModeValue("neutral.50", "neutral.800")}
+                    transition="all 0.25s ease"
+                    _hover={{
+                      boxShadow: "0 0 22px rgba(168, 85, 247, 0.6)",
+                    }}
+                    _focus={{
+                      boxShadow: "0 0 35px rgba(168, 85, 247, 0.9)",
+                      transform: "scale(1.03)",
+                    }}
+                    _placeholder={{
+                      color: "purple.300",
+                    }}
+                    value={shareUrl}
+                    isReadOnly
+                  />
+                  <Button
+                    h="56px"
+                    rounded="full"
+                    bgGradient="linear(to-r, pink.400, pink.600)"
+                    color="white"
+                    _hover={{
+                      bgGradient:
+                        "linear(to-r, purple.400, purple.500, purple.600)",
+                      transform: "scale(1.06)",
+                      boxShadow: "0 0 30px rgba(168, 85, 247, 0.7)",
+                    }}
+                    onClick={handleCopyLink}
+                    colorScheme="purple"
+                  >
+                    Copy
+                  </Button>
+                </Flex>
+              )}
             </DecorativeBox>
           </Box>
         </Box>

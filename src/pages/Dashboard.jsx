@@ -8,13 +8,40 @@ import {
 } from "@chakra-ui/react";
 import RunawayButton from "./RunAwayButton";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import * as jwtDecode from "jwt-decode";
+import { useEffect, useState } from "react";
 
 const Dashboard = () => {
   const bg = useColorModeValue("neutral.0", "neutral.900");
   const navigate = useNavigate();
+  const location = useLocation();
+  const [name, setName] = useState();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const name = params.get("name");
+    const imageToken = params.get("image"); // JWT
+
+    if (name) {
+      localStorage.setItem("valentine_name", name);
+      setName(name);
+    }
+
+    if (imageToken) {
+      try {
+        const decoded = jwtDecode(imageToken);
+        if (decoded.image) {
+          localStorage.setItem("valentine_image", decoded.image);
+        }
+      } catch (err) {
+        console.error("Invalid JWT token for image:", err);
+      }
+    }
+  }, [location.search]);
 
   // 💖 Get name from localStorage
-  const name = localStorage.getItem("valentine_name") || "";
+  // const name = localStorage.getItem("valentine_name") || "";
 
   return (
     <Box p={6} minH="100vh" position="relative">
