@@ -1,8 +1,20 @@
-import { Flex, Heading, Spacer, Box } from "@chakra-ui/react";
+import {
+  Flex,
+  Heading,
+  Spacer,
+  Box,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import ThemeToggleButton from "./ThemeToggle";
 import AdBanner from "./AddBanner";
+import { useEffect, useState } from "react";
 
 export default function Navbar() {
+  const innerBg = useColorModeValue(
+    "linear(to-br, pink.50, purple.50)",
+    "linear(to-br, #1a1025, #2a143d)",
+  );
+
   return (
     <Flex
       as="nav"
@@ -12,7 +24,7 @@ export default function Navbar() {
       position="sticky"
       top="0"
       zIndex="100"
-      bg="whiteAlpha.900"
+      bgGradient={innerBg}
       backdropFilter="blur(10px)"
     >
       {/* 💖 SEO Heading */}
