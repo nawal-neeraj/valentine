@@ -156,7 +156,12 @@ const Entry = () => {
 
   return (
     <>
-      <Box mx="auto" p={6} minH="100vh" position="relative">
+      <Box
+        mx="auto"
+        p={6}
+        // minH="90vh"
+        position="relative"
+      >
         <FallingStars count={135} />
         {showAlert && (
           <AlertBox {...alertData} onClose={() => setShowAlert(false)} />
@@ -164,15 +169,15 @@ const Entry = () => {
 
         <Box
           mx="auto"
-          w={{ base: "90%", md: "70%", xl: "60%" }}
+          w={{ base: "100%", md: "70%", xl: "60%" }}
           p={6}
-          minH="100vh"
+          // minH="100vh"
         >
           <Box
             bg={bg}
             borderRadius="lg"
             boxShadow="lg"
-            minH="60vh"
+            // minH="60vh"
             display="flex"
             flexDirection="column"
             sx={successAnimation}
@@ -193,7 +198,7 @@ const Entry = () => {
 
               {/* ✍️ Name */}
               <Flex justify="center">
-                <Box w={{ base: "90%", lg: "80%" }}>
+                <Box w={{ base: "100%", lg: "80%" }}>
                   <Input
                     h="56px"
                     rounded="full"
@@ -218,7 +223,7 @@ const Entry = () => {
 
               {/* 🖼 Image */}
               <Flex pt="2rem" justify="center">
-                <Box w={{ base: "90%", lg: "80%" }} textAlign="center">
+                <Box w={{ base: "100%", lg: "80%" }} textAlign="center">
                   <Input
                     type="file"
                     accept="image/*"
@@ -259,7 +264,7 @@ const Entry = () => {
                 </Box>
               </Flex>
               {/* 🚀 Submit */}
-              <Box mt="auto" textAlign="center" pt="1.5rem">
+              <Box mt="auto" mb={2} textAlign="center" pt="1.5rem">
                 <Button
                   w="90%"
                   h="56px"
@@ -278,7 +283,7 @@ const Entry = () => {
                 </Button>
               </Box>
               {shareUrl && (
-                <Flex mt={3} gap={3}>
+                <Flex direction={{ base: "column", md: "row" }} mt={3} gap={3}>
                   <Input
                     h="56px"
                     rounded="full"
@@ -312,7 +317,7 @@ const Entry = () => {
                     onClick={handleCopyLink}
                     colorScheme="purple"
                   >
-                    Copy
+                    Share
                   </Button>
                 </Flex>
               )}
